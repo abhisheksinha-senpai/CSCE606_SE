@@ -1,0 +1,43 @@
+<!--  This file is app/views/movies/index.html.erb -->
+<h2>All Movies</h2>
+<% if !@all_ratings.empty? %>
+  <%= form_tag movies_path, :id => 'ratings_form', :method => 'get' do %>
+    <%@all_ratings.each do |rating|%>
+      <input type="checkbox" id="<%= "ratings_#{rating}" %>" name="<%= "ratings[#{rating}]" %>" value=1 <%= @Rating_from_filter.include?(rating) ? 'checked' : '' %> >
+      <span><%= "#{rating}" %></span>&nbsp;&nbsp;
+    <% end %>
+    <%= submit_tag 'Submit', :id => 'ratings_submit', :class => 'btn btn-primary'%>
+  <% end %>
+<% end %>
+
+<%#  Part 1: Start here... %>
+
+<table class="table table-striped col-md-12" id="movies">
+  <thead>
+    <tr>
+      <th><%=link_to 'Movie Title', movies_path(:sort => "title"), :id => "title_header", :class => ((@sort_param == 'title') ? 'hilite bg-warning text-light' : '')%></th>
+      <th>Rating</th>
+      <th><%=link_to 'Release Date', movies_path(:sort => "release_date"), :id => "release_date_header", :class => ((@sort_param == 'release_date') ? 'hilite bg-warning text-light' : '')%></th>
+      <th>More Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @movies.each do |movie| %>
+      <tr>
+        <td>
+          <%= movie.title %>
+        </td>
+        <td>
+          <%= movie.rating %>
+        </td>
+        <td>
+          <%= movie.release_date %>
+        </td>
+        <td>
+          <%= link_to "More about #{movie.title}", movie_path(movie) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= link_to 'Add new movie', new_movie_path, :class => 'btn btn-primary' %>
